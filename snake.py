@@ -81,6 +81,16 @@ turtle.onkeypress(left, LEFT_ARROW)
 turtle.onkeypress(right, RIGHT_ARROW)
 turtle.listen()
 
+def make_food():
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)-1
+    
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randit(min_y,max_y)*SQUARE_SIZE
+    
+
 def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
@@ -104,6 +114,15 @@ def move_snake():
     new_stamp = snake.stamp()
     stamp_list.append(new_stamp)
     #special place ( part 5)
+    global food_stamps, food_pos
+    if snake.pos() in food_pos:
+        food_ind=food_pos.index(snake.pos())
+        food.clearstamp(food_stamps[food_ind])
+        food_pos.pop(food_ind)
+        food_stamps.pop(food_ind)
+        print("you have eaten the food!")
+        turtle.ontimer(move_snake,TIME_STEP)
+        
     old_stamp = stamp_list.pop(0)
     snake.clearstamp(old_stamp)
     pos_list.pop(0)
@@ -127,7 +146,7 @@ def move_snake():
         
     turtle.ontimer(move_snake,TIME_STEP)
     
-move_snake()
+
 
         
 
@@ -137,10 +156,14 @@ food = turtle.clone()
 food.shape("trash.gif")
 food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
 food_stamps = []
-
 for food_ID in food_pos:
-    food.goto(50,50)
+    food.goto(food_ID)
+    Food = food.stamp()
+    food_stamps.append(Food)
+    food.hideturtle()
 
+move_snake()  
+  
     
         
 
